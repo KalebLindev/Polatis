@@ -1,0 +1,63 @@
+<html>
+  <head>
+
+  </head>
+  <body>
+    <script>
+
+      async function fetcher() {
+
+          const path1 = "optical-switch:cross-connects"
+          const path2 = "pair"
+          let port = ""
+          let connected = ""
+          let label1 = ""
+          let label2 = ""
+          const url = "http://10.239.0.32:8008/api/data/optical-switch:cross-connects"
+          const headers = {
+              "Authorization": "Basic " +btoa("admin:root"),
+              "Content-Type": "application/yang-data+json"
+            }
+
+          userPortSearch = prompt("What port would you like to search for?")
+
+
+          const r = await fetch(url, { headers: headers })
+          const res = await r.json()
+          const linkArray = res["optical-switch:cross-connects"]["pair"]
+          console.log(linkArray)
+
+          linkArray.forEach(each => {
+            console.log(each)
+             if (Number(each["ingress"]) == userPortSearch) {
+              port = each["ingress"]
+              connected = each["egress"]
+            }
+          })
+  
+          async function portApiFunc(arg) {
+
+  
+            const endpoint = "http://10.239.0.32:8008/api/data/optical-switch:ports/port=" + arg + "/port-label"
+            const p = await fetch(endpoint, { headers: headers})
+            const label = await p.json()
+            console.log(label)
+              return label["optical-switch:port-label"]
+            }
+            if (port) {
+              label1 = await portApiFunc(port)
+              label2 = await portApiFunc(connected)
+              console.log("PORT#:", port, '"', label1, '"', "is connected to PORT#:", connected, '"', label2, '"')
+            }
+            else {
+              console.log("PORT#:", userPortSearch, label1, "is not connected to another port")
+            }
+            portApiFunc()
+        }
+
+
+      fetcher()
+
+    </script>
+  </body>
+</html>
