@@ -1,0 +1,93 @@
+body {
+    /* background-color: rgb(211, 184, 169); */
+    background: linear-gradient(#91c8e5, #e6a164);
+}
+
+#list_h3 {
+    color: black;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    gap: 8.5rem;
+    max-width: 420px;
+}
+
+#list_div {
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    max-width: 420px;
+}
+
+#src_list_container, #dst_list_container {
+    /* background-color: firebrick; */
+    max-width: 200px;
+    padding: 0;
+    display: flex;
+    gap: 2rem;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.list_text {
+    background-color: rgb(222, 255, 242);
+    outline: 1px solid green;
+    min-height: 50px;
+    min-width: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    z-index: 1;
+}
+
+#dst_list_container li {
+    background-color: rgb(255, 228, 222);
+    outline: 1px solid rgb(128, 0, 0);
+    min-height: 50px;
+    min-width: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+}
+
+#src_list_container li .list_text:hover {
+    background-color: rgb(187, 216, 204);
+    outline: 1px solid rgb(7, 132, 0);
+}
+
+#dst_list_container li:hover{
+    background-color: rgb(223, 199, 194);
+    outline: 1px solid rgb(93, 0, 0);
+}
+
+.src_list_cancel_box {
+    background-color: firebrick;
+    display: block;
+    position: relative;
+    left: 50px;
+    min-width: 50px;
+    min-height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    font-family: Arial, Helvetica, sans-serif;
+    transition: left .08s ease-in-out;
+}
+
+.src_list_cancel_box:hover {
+    background-color: rgb(98, 19, 19);
+    cursor: pointer;
+}
+
+.src_ul_container {
+    position: relative;
+    left: -50px;
+    display: flex;
+    flex-direction: row;
+    list-style-type: none;
+    padding: 0;
+}
