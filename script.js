@@ -1,32 +1,34 @@
 //* Polatis Port I/O GET Data Code Block Starts Here
 const infoText = document.getElementById("info")
 
+const headers = {
+    "Authorization": "Basic " +btoa("admin:root"),
+    "Content-Type": "application/yang-data+json",
+    "cache-control": "no-cache"
+}
+
 async function fetcher() {
 
     //^ Fetcher Top Scope Variables
-    // const path1 = "optical-switch:cross-connects"
-    // const path2 = "pair"
     let port = ""
     let connected = ""
     let label1 = ""
     let label2 = ""
     let message = ""
     const url = "http://10.239.0.32:8008/api/data/optical-switch:cross-connects"
-    const headers = {
-        "Authorization": "Basic " +btoa("admin:root"),
-        "Content-Type": "application/yang-data+json"
-    }
 
     //^ Input for which Polatis port to API data from
     // userPortSearch = prompt("What port would you like to search for?")
     userPortSearch = "5"
 
-
-    const r = await fetch(url, { headers: headers })
-    const res = await r.json()
-    const linkArray = res["optical-switch:cross-connects"]["pair"]
+    const res = await fetch(url, { headers: headers })
+    const jsonRes = await res.json()
+    // console.log(jsonRes)
+    const linkArray = jsonRes["optical-switch:cross-connects"]["pair"]
+    // console.log(linkArray)
 
     linkArray.forEach(each => {
+        // console.log(each)
         if (Number(each["ingress"]) == userPortSearch) {
         port = each["ingress"]
         connected = each["egress"]
@@ -38,7 +40,7 @@ async function fetcher() {
         const endpoint = "http://10.239.0.32:8008/api/data/optical-switch:ports/port=" + arg + "/port-label"
         const p = await fetch(endpoint, { headers: headers})
         const label = await p.json()
-        console.log(label)
+        // console.log(label)
         return label["optical-switch:port-label"]
     }
 
@@ -60,9 +62,6 @@ async function fetcher() {
 
 fetcher()
 
-//^ Test if the function can be called after all the code and the program still work
-// fetcher()
-
 //~=================================================================================
 
 //* Polatis Group Connect Code Block Starts Here
@@ -72,16 +71,16 @@ let src = ""
 let dst = ""
 
 //^ TEST Data for coding at home, will be appended with API data when online
-const polatisArraySrc = ["CCU_01_SRC", "CCU_02_SRC", "CCU_03_SRC"]
-const polatisArrayDst = ["CCU_01_DST", "CCU_02_DST", "CCU_03_DST"]
+const polatisArraySrc = []
+const polatisArrayDst = []
 
 
 
 const cancelFuncAppear = (e = null) => {
     
-        e.style.backgroundColor = "firebrick"
-        e.style.outline = "none"
-        e.style.color = "black"
+    e.style.backgroundColor = "firebrick"
+    e.style.outline = "none"
+    e.style.color = "black"
     
 }
 
@@ -98,7 +97,7 @@ const cancelFuncLeave = (e = null) => {
 
 const linkingFunc = () => {
     if(src && dst) {
-        console.log(src, dst)
+        linkPolatisPorts(src, dst)
         src = ""
         dst = ""
         setTimeout(() => {
@@ -113,6 +112,93 @@ const show_cancel_box = (e) => {
     target = e.previousElementSibling
     target.style.left = "-16px"
 }
+
+//~=================================================================================
+//&=================================================================================
+//?=================================================================================
+
+
+const dstSearch = "dst"
+const srcSearch = "src"
+const groups = []
+let dstGroupsHold = []
+let srcGroupsHold = []
+let dstNumIndex = 1
+let srcNumIndex = 1
+const dstGroupsEnd = Array(100).fill(null)
+const srcGroupsEnd = Array(100).fill(null)
+
+const linkPolatisPorts = async (portSrc, portDst) => {
+
+    //& Posting Data to Polatis
+    const url2 = "http://10.239.0.32:8008/api/operations/polatis-switch:add-group-cross-connect"
+    const postDictionary = JSON.stringify({
+        "input": {
+            "group-name-from": portDst,
+            "group-name-to": portSrc
+        }  
+    })
+    //& Custom Header
+    const res2 = await fetch(
+        url2, {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                "Authorization": "Basic " +btoa("admin:root"),
+                "Content-Type": "application/yang-data+json",
+            },
+            body: postDictionary
+        }
+        )
+    console.log(`${portSrc} --> ${portDst}`)
+}
+
+async function PullAndPush() {
+    let array = null
+    const url1 = 'http://10.239.0.32:8008/api/data/optical-switch:groups'
+    const r = await fetch(url1, {
+            headers: headers
+        })
+    if (r.ok) {
+        const res = await r.json()
+        array = res["optical-switch:groups"]["group"]
+        array.forEach(each => {
+            //^ NEED to convert this for in into JavaScript
+            if(each["group-name"].toLowerCase().includes(dstSearch.toLowerCase())) {
+                dstGroupsHold.push(each["group-name"])
+            }
+            
+            //^ NEED to convert this for in into JavaScript
+            if(each["group-name"].toLowerCase().includes(srcSearch.toLowerCase())) {
+                srcGroupsHold.push(each["group-name"])
+            }
+        })
+        srcGroupsHold.forEach(each => {
+            polatisArraySrc.push(each)
+        })
+        dstGroupsHold.forEach(each => {
+            polatisArrayDst.push(each)
+        })
+        console.log(dstGroupsHold)
+        console.log(srcGroupsHold)
+    }
+    //^ NEED to convert this for in into JavaScript
+    if(dstGroupsHold) {
+        dstGroupsHold.forEach(each => {
+            dstGroupsEnd[dstNumIndex] = dstGroupsHold[srcNumIndex - 1]
+            dstNumIndex += 1
+        })
+
+    }
+
+    //^ NEED to convert this for in into JavaScript
+    srcGroupsHold.forEach(each => {
+        srcGroupsEnd[srcNumIndex] = srcGroupsHold[srcNumIndex - 1]
+        srcNumIndex += 1
+    })
+
+    console.log("DST List:", dstGroupsEnd)
+    console.log("SRC List:", srcGroupsEnd)
 
 polatisArraySrc.forEach(each => {
     const newNode = document.createElement("div")
@@ -140,83 +226,14 @@ polatisArrayDst.forEach(each => {
 
     dstListContainer.appendChild(newNode)
 })
+}
+                
+const data = PullAndPush()
 
 
-//~=================================================================================
-//&=================================================================================
-//?=================================================================================
 
 
-// const dstSearch = "dst"
-// const srcSearch = "src"
-// let dstGroupsHold = []
-// let srcGroupsHold = []
-// let dstNumIndex = 1
-// let srcNumIndex = 1
-// const dstGroupsEnd = [None] * 100
-// const srcGroupsEnd = [None] * 100
 
-
-// async function Pull() {
-
-//     const url = 'http://10.239.0.32:8008/api/data/optical-switch:groups'
-//     const r = requests.get(url, auth=("admin", "root"))
-//     if (r.ok) {
-//         return r.text
-//     } else {
-//         console.log("Failed to retrieve data from the API.")
-//         return None
-//     }
-// }
-    
-
-// const data = Pull()
-// if (data) {
-
-//     //& Parse the XML data
-//     root = ET.fromstring(data)
-
-//     //& Create a dictionary to store the group data
-//     groups = {}
-
-//     //& Iterate over the group elements
-//     //^ NEED to convert this for in enumerate into JavaScript
-//     for index, group_elem in enumerate(root.findall(".//{http://www.polatis.com/yang/optical-switch}group"), start=1){
-//         const group_name = group_elem.findtext("{http://www.polatis.com/yang/optical-switch}group-name")
-//         const groups[index] = group_name
-//     }
-// }
-// for(each in groups) {
-
-//     //^ NEED to convert this for in into JavaScript
-//     if(dstSearch.lower() in groups[each].lower()) {
-//         dstGroupsHold.append(groups[each])
-//     }
-
-//     //^ NEED to convert this for in into JavaScript
-//     if(srcSearch.lower() in groups[each].lower()) {
-//         srcGroupsHold.append(groups[each])
-//     }
-// }
-
-// //^ NEED to convert this for in into JavaScript
-// for (entries in dstGroupsHold) {
-//     dstGroupsEnd[dstNumIndex] = dstGroupsHold[dstNumIndex - 1]
-//     dstNumIndex += 1
-// }
-
-// //^ NEED to convert this for in into JavaScript
-// for (entries in srcGroupsHold) {
-//     srcGroupsEnd[srcNumIndex] = srcGroupsHold[srcNumIndex - 1]
-//     srcNumIndex += 1
-// }
-
-// console.log("DST List:", dstGroupsHold)
-// console.log("SRC List:", srcGroupsHold)
-// # -----------------------------------------
-
-//     //& Prompt the user to enter a number or a comma-separated list of numbers
-//     const message = prompt("Which SRC and which DST?")
 
 //     //^ Dummy code for when I want to try and send Polatis the delete port link command
 //     // # if (message == "d1"):
@@ -264,19 +281,5 @@ polatisArrayDst.forEach(each => {
 //     //& print(numbers)
 //     const num1 = int(numbers[0])
 //     const num2 = int(numbers[1])
-//     const dictionary = {"input": {"group-name-from": dstGroupsEnd[num1], "group-name-to": srcGroupsEnd[num2]}}
-//     const dataPolatis = json.dumps(dictionary, indent=4)
-
-//     //& Posting Data to Polatis
-//     const url = "http://10.239.0.32:8008/api/operations/polatis-switch:add-group-cross-connect"
     
-//     //& Custom Header
-//     headers = {"Content-Type": "application/yang-data+json"}
-//     requests.post(
-//         url,
-//         headers=headers,
-//         data=dataPolatis,
-//         auth=("admin", "root"),
-//     )
-//     console.log(dictionary["input"]["group-name-from"], "-->", dictionary["input"]["group-name-to"])
 
