@@ -62,6 +62,7 @@ async function fetcher() {
     portApiFunc()
 }
 
+//* Fetch Single Port Data
 // fetcher()
 
 //~=================================================================================
@@ -75,15 +76,13 @@ let dst = ""
 //^ TEST Data for coding at home, will be appended with API data when online
 // const polatisArraySrc = []
 // const polatisArrayDst = []
-const polatisArraySrc = ["PSU_01_SRC", "PSU_02_SRC", "PSU_03_DST"]
-const polatisArrayDst = ["CCU_01_DST", "CCU_02_DST", "CCU_03_DST"]
+const polatisArraySrc = ["PSU_01_SRC", "PSU_02_SRC", "PSU_03_SRC", "PSU_01_SRC", "PSU_02_SRC", "PSU_03_SRC", "PSU_01_SRC", "PSU_02_SRC", "PSU_03_SRC", "PSU_01_SRC", "PSU_02_SRC", "PSU_03_SRC", "PSU_01_SRC", "PSU_02_SRC", "PSU_03_SRC"]
+const polatisArrayDst = ["CCU_01_DST", "CCU_02_DST", "CCU_03_DST", "CCU_01_DST", "CCU_02_DST", "CCU_03_DST", "CCU_01_DST", "CCU_02_DST", "CCU_03_DST", "CCU_01_DST", "CCU_02_DST", "CCU_03_DST", "CCU_01_DST", "CCU_02_DST", "CCU_03_DST", "CCU_01_DST", "CCU_02_DST", "CCU_03_DST"]
 
 const cancelFuncAppear = (e = null) => {
-    
     e.style.backgroundColor = "firebrick"
     e.style.outline = "none"
     e.style.color = "black"
-    
 }
 
 const cancelFuncLeave = (e = null) => {
@@ -95,6 +94,8 @@ const cancelFuncLeave = (e = null) => {
             each.style.left = "50px"
         })
     }
+    clearMobileSrcSelection()
+    clearMobileDstSelection()
 }
 
 const linkingFunc = () => {
@@ -104,6 +105,8 @@ const linkingFunc = () => {
         dst = ""
         setTimeout(() => {
             cancelFuncLeave()
+            clearMobileSrcSelection()
+            clearMobileDstSelection()
         }, 500)
     } else { return }}
 
@@ -111,8 +114,24 @@ const show_cancel_box = (e) => {
     document.querySelectorAll(".src_list_cancel_box").forEach(each => {
         each.style.left = "50px"
     })
+    document.querySelectorAll(".list_text").forEach(each => {
+        each.classList.remove("mobile_on_click_list_item_src")
+    })
+    e.classList.add("mobile_on_click_list_item_src")
     target = e.previousElementSibling
     target.style.left = "-16px"
+}
+
+const clearMobileDstSelection = () => {
+    document.querySelectorAll(".mobile_on_click_list_item_dst").forEach(each => {
+        each.classList.remove("mobile_on_click_list_item_dst")
+    })
+}
+
+const clearMobileSrcSelection = () => {
+    document.querySelectorAll(".mobile_on_click_list_item_src").forEach(each => {
+        each.classList.remove("mobile_on_click_list_item_src")
+    })
 }
 
 //~=================================================================================
@@ -195,7 +214,6 @@ async function PullAndPush() {
                 dstGroupsEnd[dstNumIndex] = dstGroupsHold[srcNumIndex - 1]
                 dstNumIndex += 1
             })
-
         }
 
         //^ NEED to convert this for in into JavaScript
@@ -209,7 +227,10 @@ async function PullAndPush() {
     
     }
     const appendArrayList = () => {
-
+        const mobileCancelButton = document.getElementById("mobile_cancel_button")
+        mobileCancelButton.addEventListener(("click"), () => {
+            cancelFuncLeave()
+        })
         polatisArraySrc.forEach(each => {
             const newNode = document.createElement("div")
             newNode.innerHTML = `
@@ -220,6 +241,8 @@ async function PullAndPush() {
             `
             newNode.addEventListener('click', (e) => {
                 src = e.target.innerText
+                clearMobileSrcSelection()
+                e.target.classList.add("mobile_on_click_list_item_src")
                 linkingFunc()
             })
             
@@ -231,11 +254,15 @@ async function PullAndPush() {
             newNode.innerText = each
             newNode.addEventListener('click', (e) => {
                 dst = e.target.innerText
+                clearMobileDstSelection()
+                e.target.classList.add("mobile_on_click_list_item_dst")
+                console.log(e.target)
                 linkingFunc()
             })
             
             dstListContainer.appendChild(newNode)
         })
     }
-// const data = PullAndPush()
-appendArrayList()
+    //* Trigger Get and Post
+    // const data = PullAndPush()
+    appendArrayList()

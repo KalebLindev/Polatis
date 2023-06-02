@@ -1,10 +1,11 @@
 body {
     /* background-color: rgb(211, 184, 169); */
-    background: linear-gradient(#91c8e5, #e6a164);
+    background: #0061b5;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 #list_h3 {
-    color: black;
+    color: white;
     margin: 0 auto;
     display: flex;
     justify-content: center;
@@ -20,7 +21,6 @@ body {
 }
 
 #src_list_container, #dst_list_container {
-    /* background-color: firebrick; */
     max-width: 200px;
     padding: 0;
     display: flex;
@@ -28,39 +28,25 @@ body {
     list-style-type: none;
     display: flex;
     flex-direction: column;
+    overflow: scroll;
+    height: 83vh;
+}
+
+.list_text, #dst_list_container li {
+    background-color: rgb(40, 75, 124);
+    color: white;
+    outline: 2px solid rgb(197, 197, 197);
+    border-radius: 1%;
+    min-height: 100px;
+    min-width: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
 }
 
 .list_text {
-    background-color: rgb(222, 255, 242);
-    outline: 1px solid green;
-    min-height: 50px;
-    min-width: 200px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: 700;
     z-index: 1;
-}
-
-#dst_list_container li {
-    background-color: rgb(255, 228, 222);
-    outline: 1px solid rgb(128, 0, 0);
-    min-height: 50px;
-    min-width: 200px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: 700;
-}
-
-#src_list_container li .list_text:hover {
-    background-color: rgb(187, 216, 204);
-    outline: 1px solid rgb(7, 132, 0);
-}
-
-#dst_list_container li:hover{
-    background-color: rgb(223, 199, 194);
-    outline: 1px solid rgb(93, 0, 0);
 }
 
 .src_list_cancel_box {
@@ -74,7 +60,6 @@ body {
     justify-content: center;
     align-items: center;
     font-size: 2rem;
-    font-family: Arial, Helvetica, sans-serif;
     transition: left .08s ease-in-out;
 }
 
@@ -92,7 +77,17 @@ body {
     padding: 0;
 }
 
-@media only screen and (min-width: 375px) {
+#mobile_cancel_button {
+    display: none;
+}
+
+@media only screen and (max-width: 980px) and (orientation: portrait)  {
+
+    body {
+        /* background-color: rgb(211, 184, 169); */
+        background: rgb(51, 138, 252);
+    }
+
     #list_div {
         min-width: 100%;
         justify-content: center;
@@ -105,6 +100,15 @@ body {
     .list_text, #dst_list_container li, #list_h3  {
         min-width: 100%;
         font-size: 4rem;
+    }
+
+    .list_text, #dst_list_container li {
+        padding: 2rem 0;
+    }
+
+    .mobile_on_click_list_item_src, .mobile_on_click_list_item_dst {
+        background-color: white !important;
+        color: black !important;
     }
 
     #list_h3 {
@@ -121,4 +125,36 @@ body {
         min-width: 400px;
     }
 
+    #mobile_cancel_button {
+        display: block;
+        position: fixed;
+        left: 1px;
+        bottom: 1px;
+        font-size: 4rem;
+        background-color: firebrick;
+        color: white;
+        text-align: center;
+        margin: 0 auto;
+        min-width: 100%;
+        padding: 2rem 0;
+        margin-top: 1.5rem;
+        text-transform: uppercase;
+        z-index: 100;
+    }
+
+    .src_list_cancel_box {
+        opacity: 0;
+        pointer-events: none;
+        
+    }
+
+}
+
+@media only screen and (min-width: 981px) and (max-width: 3780px) {
+    .list_text:hover, #dst_list_container li:hover {
+        background-color: white;
+        color: rgb(22, 42, 70);
+        cursor: pointer;
+    }
+    
 }
