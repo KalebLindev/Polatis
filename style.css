@@ -88,6 +88,7 @@ body {
         flex-direction: column;
         align-items: center;
         gap: 2rem;
+        margin-top: 8rem;
     }
 
     #list_h3 {
@@ -113,7 +114,7 @@ body {
     #src_list_container, #dst_list_container {
         min-width: 45%;
         overflow: scroll;
-        height: 1500px;
+        height: 1350px;
     }
 
     .list_text, #dst_list_container li, #list_h3  {
