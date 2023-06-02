@@ -1,7 +1,14 @@
 body {
-    /* background-color: rgb(211, 184, 169); */
+    margin: 0;
+    padding: 0;
     background: #0061b5;
     font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 98%;
+    /* position: relative;
+    top: 30px; */
 }
 
 #list_h3 {
@@ -29,7 +36,7 @@ body {
     display: flex;
     flex-direction: column;
     overflow: scroll;
-    height: 83vh;
+    height: 78vh;
 }
 
 .list_text, #dst_list_container li {
@@ -127,15 +134,15 @@ body {
 
     #mobile_cancel_button {
         display: block;
-        position: fixed;
-        left: 1px;
-        bottom: 1px;
+        /* position: fixed; */
+        /* left: 1px; */
+        /* bottom: 1px; */
         font-size: 4rem;
         background-color: firebrick;
         color: white;
         text-align: center;
         margin: 0 auto;
-        min-width: 100%;
+        min-width: 95%;
         padding: 2rem 0;
         margin-top: 1.5rem;
         text-transform: uppercase;
