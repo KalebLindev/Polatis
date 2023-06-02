@@ -8,54 +8,56 @@ const headers = {
 }
 
 async function fetcher() {
+    try {
+        //^ Fetcher Top Scope Variables
+        let port = ""
+        let connected = ""
+        let label1 = ""
+        let label2 = ""
+        let message = ""
+        const url = "http://10.239.0.32:8008/api/data/optical-switch:cross-connects"
 
-    //^ Fetcher Top Scope Variables
-    let port = ""
-    let connected = ""
-    let label1 = ""
-    let label2 = ""
-    let message = ""
-    const url = "http://10.239.0.32:8008/api/data/optical-switch:cross-connects"
+        //^ Input for which Polatis port to API data from
+        // userPortSearch = prompt("What port would you like to search for?")
+        // userPortSearch = "17"
 
-    //^ Input for which Polatis port to API data from
-    // userPortSearch = prompt("What port would you like to search for?")
-    userPortSearch = "5"
+        const res = await fetch(url, { headers: headers })
+        const jsonRes = await res.json()
+        // console.log(jsonRes)
+        const linkArray = jsonRes["optical-switch:cross-connects"]["pair"]
+        // console.log(linkArray)
 
-    const res = await fetch(url, { headers: headers })
-    const jsonRes = await res.json()
-    // console.log(jsonRes)
-    const linkArray = jsonRes["optical-switch:cross-connects"]["pair"]
-    // console.log(linkArray)
+        linkArray.forEach(each => {
+            // console.log(each)
+            if (Number(each["ingress"]) == userPortSearch) {
+            port = each["ingress"]
+            connected = each["egress"]
+        }})
 
-    linkArray.forEach(each => {
-        // console.log(each)
-        if (Number(each["ingress"]) == userPortSearch) {
-        port = each["ingress"]
-        connected = each["egress"]
-    }})
+        //^ function for API calling the port endpoint to get ingress and egress data
+        async function portApiFunc(arg) {
 
-    //^ function for API calling the port endpoint to get ingress and egress data
-    async function portApiFunc(arg) {
+            const endpoint = "http://10.239.0.32:8008/api/data/optical-switch:ports/port=" + arg + "/port-label"
+            const p = await fetch(endpoint, { headers: headers})
+            const label = await p.json()
+            // console.log(label)
+            return label["optical-switch:port-label"]
+        }
 
-        const endpoint = "http://10.239.0.32:8008/api/data/optical-switch:ports/port=" + arg + "/port-label"
-        const p = await fetch(endpoint, { headers: headers})
-        const label = await p.json()
-        // console.log(label)
-        return label["optical-switch:port-label"]
+        if (port) {
+            label1 = await portApiFunc(port)
+            label2 = await portApiFunc(connected)
+            message = (`PORT: ${port} ${label1} is connected to PORT: ${connected} ${label2}`)
+            console.log(message)
+            infoText.innerText = message
+        } else {
+            message = (`PORT: #${userPortSearch} ${label1} is not connected to another port`)
+            console.log(message)
+            infoText.innerText = message
+        }   
+    } catch(err) {
+        console.log(err)
     }
-
-    if (port) {
-        label1 = await portApiFunc(port)
-        label2 = await portApiFunc(connected)
-        message = (`PORT: ${port} ${label1} is connected to PORT: ${connected} ${label2}`)
-        console.log(message)
-        infoText.innerText = message
-    } else {
-        message = (`PORT: #${userPortSearch} ${label1} is not connected to another port`)
-        console.log(message)
-        infoText.innerText = message
-    }
-
     //^ Must be called inside Fetcher Func since it is initiated inside of it
     portApiFunc()
 }
@@ -71,10 +73,10 @@ let src = ""
 let dst = ""
 
 //^ TEST Data for coding at home, will be appended with API data when online
-const polatisArraySrc = []
-const polatisArrayDst = []
-
-
+// const polatisArraySrc = []
+// const polatisArrayDst = []
+const polatisArraySrc = ["PSU_01_SRC", "PSU_02_SRC", "PSU_03_DST"]
+const polatisArrayDst = ["CCU_01_DST", "CCU_02_DST", "CCU_03_DST"]
 
 const cancelFuncAppear = (e = null) => {
     
@@ -154,132 +156,86 @@ const linkPolatisPorts = async (portSrc, portDst) => {
 }
 
 async function PullAndPush() {
+    
     let array = null
     const url1 = 'http://10.239.0.32:8008/api/data/optical-switch:groups'
-    const r = await fetch(url1, {
+        const r = await fetch(url1, {
             headers: headers
         })
+
     if (r.ok) {
-        const res = await r.json()
-        array = res["optical-switch:groups"]["group"]
-        array.forEach(each => {
-            //^ NEED to convert this for in into JavaScript
-            if(each["group-name"].toLowerCase().includes(dstSearch.toLowerCase())) {
-                dstGroupsHold.push(each["group-name"])
-            }
-            
-            //^ NEED to convert this for in into JavaScript
-            if(each["group-name"].toLowerCase().includes(srcSearch.toLowerCase())) {
-                srcGroupsHold.push(each["group-name"])
-            }
-        })
+            const res = await r.json()
+            array = res["optical-switch:groups"]["group"]
+            array.forEach(each => {
+                //^ NEED to convert this for in into JavaScript
+                if(each["group-name"].toLowerCase().includes(dstSearch.toLowerCase())) {
+                    dstGroupsHold.push(each["group-name"])
+                }
+                
+                //^ NEED to convert this for in into JavaScript
+                if(each["group-name"].toLowerCase().includes(srcSearch.toLowerCase())) {
+                    srcGroupsHold.push(each["group-name"])
+                }
+            })
+            srcGroupsHold.forEach(each => {
+                polatisArraySrc.push(each)
+            })
+            dstGroupsHold.forEach(each => {
+                polatisArrayDst.push(each)
+            })
+            console.log(dstGroupsHold)
+            console.log(srcGroupsHold)
+        } else {
+            console.log("NOPE")
+        }
+
+        //^ NEED to convert this for in into JavaScript
+        if(dstGroupsHold) {
+            dstGroupsHold.forEach(each => {
+                dstGroupsEnd[dstNumIndex] = dstGroupsHold[srcNumIndex - 1]
+                dstNumIndex += 1
+            })
+
+        }
+
+        //^ NEED to convert this for in into JavaScript
         srcGroupsHold.forEach(each => {
-            polatisArraySrc.push(each)
+            srcGroupsEnd[srcNumIndex] = srcGroupsHold[srcNumIndex - 1]
+            srcNumIndex += 1
         })
-        dstGroupsHold.forEach(each => {
-            polatisArrayDst.push(each)
-        })
-        console.log(dstGroupsHold)
-        console.log(srcGroupsHold)
+
+        console.log("DST List:", dstGroupsEnd)
+        console.log("SRC List:", srcGroupsEnd)
+    
     }
-    //^ NEED to convert this for in into JavaScript
-    if(dstGroupsHold) {
-        dstGroupsHold.forEach(each => {
-            dstGroupsEnd[dstNumIndex] = dstGroupsHold[srcNumIndex - 1]
-            dstNumIndex += 1
-        })
+    const appendArrayList = () => {
 
-    }
-
-    //^ NEED to convert this for in into JavaScript
-    srcGroupsHold.forEach(each => {
-        srcGroupsEnd[srcNumIndex] = srcGroupsHold[srcNumIndex - 1]
-        srcNumIndex += 1
-    })
-
-    console.log("DST List:", dstGroupsEnd)
-    console.log("SRC List:", srcGroupsEnd)
-
-polatisArraySrc.forEach(each => {
-    const newNode = document.createElement("div")
-    newNode.innerHTML = `
-        <ul class="src_ul_container">
+        polatisArraySrc.forEach(each => {
+            const newNode = document.createElement("div")
+            newNode.innerHTML = `
+            <ul class="src_ul_container">
             <li class="src_list_cancel_box" onmousedown="cancelFuncLeave(this)" onmouseup="cancelFuncAppear(this)">X</li>
             <li class="list_text" onclick="show_cancel_box(this)">${each}</li>
-        </ul>
-    `
-    newNode.addEventListener('click', (e) => {
-        src = e.target.innerText
-        linkingFunc()
-    })
-
-    srcListContainer.appendChild(newNode)
-})
-
-polatisArrayDst.forEach(each => {
-    const newNode = document.createElement("li")
-    newNode.innerText = each
-    newNode.addEventListener('click', (e) => {
-        dst = e.target.innerText
-        linkingFunc()
-    })
-
-    dstListContainer.appendChild(newNode)
-})
-}
-                
+            </ul>
+            `
+            newNode.addEventListener('click', (e) => {
+                src = e.target.innerText
+                linkingFunc()
+            })
+            
+            srcListContainer.appendChild(newNode)
+        })
+        
+        polatisArrayDst.forEach(each => {
+            const newNode = document.createElement("li")
+            newNode.innerText = each
+            newNode.addEventListener('click', (e) => {
+                dst = e.target.innerText
+                linkingFunc()
+            })
+            
+            dstListContainer.appendChild(newNode)
+        })
+    }
 const data = PullAndPush()
-
-
-
-
-
-
-//     //^ Dummy code for when I want to try and send Polatis the delete port link command
-//     // # if (message == "d1"):
-//     // #     print('test')
-//     // #     url = "http://10.239.0.32:8008/api/operations/polatis-switch:delete-group-cross-connect"
-//     // #     # Custom Header
-//     // #     headers = {
-//     // #         "Content-Type": "application/yang-data+json"
-//     // #     }
-//     // #
-//     // #     data = {
-//     // #         "input": {"group-name": dstGroupsEnd[1]}
-//     // #     }
-//     // #
-//     // #     requests.post(
-//     // #         url,
-//     // #         headers=headers,
-//     // #         data=data,
-//     // #         auth=("admin", "root"),
-//     // #     )
-
-//     //& Check if the user input starts with a period and contains a comma
-//     if (message.startsWith('.') && message.includes(',')) {
-//         const level = message[2]
-
-//         //^ CONFIRM a way for DEST to be the the char after the comma. cannot just be the 3rd index (10,11,12 would not work)
-//         //^ USe the splice or slice I guess or find what is after the comma
-//         const dest = message[3: message.find(',')]
-
-//         //^ USe the splice or slice I guess or find what is after the comma
-//         const source = message[message.find(',') + 1: message.find('\r')]
-
-//         //& Split the input into a list of numbers
-//         //^ USe the splice or slice I guess or find what is after the comma
-//         const numbers = message[3:].split(',')
-
-//         //& Convert the numbers to integers and get the corresponding group names
-//         //^ NEED to convert this for in into JavaScript
-//         const group_names = [groups[int(num)] for num in numbers]
-
-//         //& Save the group names as variables
-//         const destPolatis, sourcePolatis = group_names
-//         const response = '.U' + level + dest + ',' + source + '\r'
-//     }
-//     //& print(numbers)
-//     const num1 = int(numbers[0])
-//     const num2 = int(numbers[1])
-    
-
+appendArrayList()

@@ -91,3 +91,22 @@ body {
     list-style-type: none;
     padding: 0;
 }
+
+@media only screen and (min-width: 375px) {
+    #list_div {
+        min-width: 90%;
+        justify-content: space-around;
+    }
+    #src_list_container, #dst_list_container {
+        min-width: 50%
+    }
+
+    #src_list_container ul {
+        min-width: 90%;
+    }
+
+    .list_text, #dst_list_container li  {
+        min-width: 100%;
+        font-size: 4rem;
+    }
+}
