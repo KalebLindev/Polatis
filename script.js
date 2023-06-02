@@ -237,5 +237,5 @@ async function PullAndPush() {
             dstListContainer.appendChild(newNode)
         })
     }
-const data = PullAndPush()
+// const data = PullAndPush()
 appendArrayList()
