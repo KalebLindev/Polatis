@@ -1,14 +1,6 @@
 body {
-    margin: 0;
-    padding: 0;
     background: #0061b5;
     font-family: Arial, Helvetica, sans-serif;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    height: 98%;
-    /* position: relative;
-    top: 30px; */
 }
 
 #list_h3 {
@@ -35,8 +27,6 @@ body {
     list-style-type: none;
     display: flex;
     flex-direction: column;
-    overflow: scroll;
-    height: 78vh;
 }
 
 .list_text, #dst_list_container li {
@@ -68,6 +58,7 @@ body {
     align-items: center;
     font-size: 2rem;
     transition: left .08s ease-in-out;
+    overflow: none;
 }
 
 .src_list_cancel_box:hover {
@@ -93,6 +84,25 @@ body {
     body {
         /* background-color: rgb(211, 184, 169); */
         background: rgb(51, 138, 252);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    #list_h3 {
+        min-width: 90%;
+        display: flex;
+        flex-direction: row;
+        margin: 0 auto;
+        margin-top: 2rem;
+        gap: 2.5rem;
+        text-align: center;
+    }
+    
+    #list_h3 h3 {
+        margin: 1rem;
+        min-width: 400px;
     }
 
     #list_div {
@@ -101,7 +111,9 @@ body {
         gap: 2.5rem;
     }
     #src_list_container, #dst_list_container {
-        min-width: 45%
+        min-width: 45%;
+        overflow: scroll;
+        height: 1500px;
     }
 
     .list_text, #dst_list_container li, #list_h3  {
@@ -116,20 +128,6 @@ body {
     .mobile_on_click_list_item_src, .mobile_on_click_list_item_dst {
         background-color: white !important;
         color: black !important;
-    }
-
-    #list_h3 {
-        min-width: 90%;
-        display: flex;
-        flex-direction: row;
-        margin: 0 auto;
-        gap: 2.5rem;
-        text-align: center;
-    }
-    
-    #list_h3 h3 {
-        margin: 1rem;
-        min-width: 400px;
     }
 
     #mobile_cancel_button {
