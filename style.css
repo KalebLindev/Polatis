@@ -94,19 +94,31 @@ body {
 
 @media only screen and (min-width: 375px) {
     #list_div {
-        min-width: 90%;
-        justify-content: space-around;
+        min-width: 100%;
+        justify-content: center;
+        gap: 2.5rem;
     }
     #src_list_container, #dst_list_container {
-        min-width: 50%
+        min-width: 45%
     }
 
-    #src_list_container ul {
-        min-width: 90%;
-    }
-
-    .list_text, #dst_list_container li  {
+    .list_text, #dst_list_container li, #list_h3  {
         min-width: 100%;
         font-size: 4rem;
     }
+
+    #list_h3 {
+        min-width: 90%;
+        display: flex;
+        flex-direction: row;
+        margin: 0 auto;
+        gap: 2.5rem;
+        text-align: center;
+    }
+    
+    #list_h3 h3 {
+        margin: 1rem;
+        min-width: 400px;
+    }
+
 }
