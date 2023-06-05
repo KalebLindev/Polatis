@@ -21,6 +21,7 @@ h1 {
 
 .project_card {
     background-color: rgb(34, 135, 178);
+    color: white;
     outline: 2px solid white;
     max-width: 400px;
     min-height: 200px;
