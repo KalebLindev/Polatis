@@ -79,6 +79,10 @@ body {
     display: none;
 }
 
+.current_dst_connected {
+    background-color: forestgreen !important;
+}
+
 @media only screen and (max-width: 980px) and (orientation: portrait)  {
 
     body {
