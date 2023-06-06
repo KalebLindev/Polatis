@@ -362,7 +362,7 @@ async function PullAndPush() {
         })
     }
     //* Trigger Get and Post
-    const data = PullAndPush()
+    // const data = PullAndPush()
 
     
     setTimeout(() => {
