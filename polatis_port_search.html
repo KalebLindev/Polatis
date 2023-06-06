@@ -1,31 +1,32 @@
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="/style_polatis_port_search.css">
-    <script defer src="/script_polatis_port_search.js"></script>
+    <link rel="stylesheet" type="text/css" href="./style_polatis_port_search.css">
+    <script defer src="./script_polatis_port_search.js"></script>
   </head>
   <body>
     <h1>What Polatis port would you like to search for?</h1>
-    <div id="user_form" onsubmit="formSubmit(this)">
+    <div id="user_form">
       <input id="user_port_input" type="number">
       <button id="user_port_button">Search</button>
     </div>
     <form id="port_data_box">
+      <div id="error_modal"></div>
       <!-- <p id="port_search_info_text">Port 24 - GHTC_CCU_24A</p> -->
       <div class="data_and_answer_box">
         <p class="port_search_data_text_left">A Port & Name:</p>
-        <p class="port_search_data_text_right"><span id="port_a">24</span> - <span id="name_a">GHTC_CCU_24A</span></p>
+        <p class="port_search_data_text_right"><span id="port_a"></span> - <span id="name_a"></span></p>
       </div>
       <div class="data_and_answer_box">
         <p class="port_search_data_text_left">Connected to:</p>
-        <p class="port_search_data_text_right""><span id="port_connected_a">512</span> - <span id="name_connected_a">SOM_PSU_01B</span></p>
+        <p class="port_search_data_text_right""><span id="port_connected_a"></span> - <span id="name_connected_a"></span></p>
       </div>
       <div class="data_and_answer_box">
         <p class="port_search_data_text_left">B Port & Name:</p>
-        <p class="port_search_data_text_right"><span id="port_b">410</span> - <span id="name_b">GHTC_CCU_24B</span></p>
+        <p class="port_search_data_text_right"><span id="port_b"></span> - <span id="name_b"></span></p>
       </div>
       <div class="data_and_answer_box">
         <p class="port_search_data_text_left">Connected to:</p>
-        <p class="port_search_data_text_right"><span id="port_connected_b">120</span> - <span id="name_connected_b">SOM_PSU_01A</span></p>
+        <p class="port_search_data_text_right"><span id="port_connected_b"></span> - <span id="name_connected_b"></span></p>
       </div>
     </form>
   </body>

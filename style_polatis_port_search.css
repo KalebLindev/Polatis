@@ -57,6 +57,28 @@ h1 {
     margin: 0 auto;
 }
 
+#error_modal {
+    display: none;
+    position: absolute;
+    background-color: white;
+    color: black;
+    margin: 0 auto;
+    width: 860px;
+    height: 1021px;
+    font-size: 3rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    /* text-align: center; */
+}
+
+#error_modal p {
+    margin: 0 auto;
+    max-width: 80%;
+    text-align: center;
+}
+
 p#port_search_info_text {
     color: white;
     font-size: 4rem;

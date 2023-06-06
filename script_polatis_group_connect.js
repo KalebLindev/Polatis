@@ -1,67 +1,13 @@
-// //* Polatis Port I/O GET Data Code Block Starts Here
-// const infoText = document.getElementById("info")
+//* Polatis Port I/O GET Data Code Block Starts Here
+const infoText = document.getElementById("info")
 
-// const headers = {
-//     "Authorization": "Basic " +btoa("admin:root"),
-//     "Content-Type": "application/yang-data+json",
-//     "cache-control": "no-cache",
-//     "credential": "include",
-//     "mode": "cors",
-// }
-
-// async function fetcher(portNumber) {
-
-//         //^ Fetcher Top Scope Variables
-//         let port = ""
-//         let connected = ""
-//         let label1 = ""
-//         let label2 = ""
-//         let message = ""
-//         const url = "http://10.239.0.32:8008/api/data/optical-switch:cross-connects"
-
-//         //^ Input for which Polatis port to API data from
-//         // userPortSearch = prompt("What port would you like to search for?")
-//         userPortSearch = portNumber || "17"
-
-//         const res = await fetch(url, { headers: headers, "credential": "include", "mode": "cors" })
-//         const jsonRes = await res.json()
-//         // console.log(jsonRes)
-//         const linkArray = jsonRes["optical-switch:cross-connects"]["pair"]
-//         // console.log(linkArray)
-
-//         linkArray.forEach(each => {
-//             // console.log(each)
-//             if (Number(each["ingress"]) == userPortSearch) {
-//             port = each["ingress"]
-//             connected = each["egress"]
-//         }})
-
-//         //^ function for API calling the port endpoint to get ingress and egress data
-//         async function portApiFunc(arg) {
-//             const endpoint = "http://10.239.0.32:8008/api/data/optical-switch:ports/port=" + arg + "/port-label"
-//             const p = await fetch(endpoint, { headers: headers, "credential": "include", "mode": "cors" })
-//             const label = await p.json()
-//             // console.log(label)
-//             return label["optical-switch:port-label"]
-//         }
-
-//         if (port) {
-//             label1 = await portApiFunc(port)
-//             label2 = await portApiFunc(connected)
-//             message = (`PORT: ${port} ${label1} is connected to PORT: ${connected} ${label2}`)
-//             console.log(message)
-//             infoText.innerText = message
-//         } else {
-//             message = (`PORT: #${userPortSearch} ${label1} is not connected to another port`)
-//             console.log(message)
-//             infoText.innerText = message
-//         }   
-//     //^ Must be called inside Fetcher Func since it is initiated inside of it
-//     portApiFunc(port)
-// }
-
-// //* Fetch Single Port Data
-// // fetcher("1")
+const headers = {
+    "Authorization": "Basic " +btoa("admin:root"),
+    "Content-Type": "application/yang-data+json",
+    "cache-control": "no-cache",
+    "credential": "include",
+    "mode": "cors",
+}
 
 //~=================================================================================
 
@@ -72,56 +18,61 @@ let src = ""
 let dst = ""
 let srcElement = null
 let dstElement = null
+let waitingDelay = false
 
 //^ TEST Data for coding at home, will be appended with API data when online
-// const polatisArraySrc = []
-// const polatisArrayDst = []
-const polatisArraySrc = [{
-    name: "PSU_01_SRC",
-    // portSideA: each["ingress"][0],
-    // portSideB: each["egress"][0],
-    "connected-group-name": "CCU_01_DST",
-    "connected-port-slot": 0
-}, {
-    name: "PSU_02_SRC",
-     // portSideA: each["ingress"][0],
-    // portSideB: each["egress"][0],
-    "connected-group-name": "CCU_02_DST",
-    "connected-port-slot": 1
-}, {
-    name: "PSU_03_SRC",
-    // portSideA: each["ingress"][0],
-    // portSideB: each["egress"][0],
-    "connected-group-name": "CCU_03_DST",
-    "connected-port-slot": 2
-}, {
-    name: "PSU_04_SRC",
-    // portSideA: each["ingress"][0],
-    // portSideB: each["egress"][0],
-    "connected-group-name": "CCU_04_DST",
-    "connected-port-slot": 3
-},]
-const polatisArrayDst = [{
-    name: "CCU_01_DST",
-    // portSideA: each["ingress"][0],
-    // portSideB: each["egress"][0],
-    "connected-group-name": "PSU_01_SRC"
-}, {
-    name: "CCU_02_DST",
-    // portSideA: each["ingress"][0],
-    // portSideB: each["egress"][0],
-    "connected-group-name": "PSU_02_SRC"
-}, {
-    name: "CCU_03_DST",
-    // portSideA: each["ingress"][0],
-    // portSideB: each["egress"][0],
-    "connected-group-name": "PSU_03_SRC"
-}, {
-    name: "CCU_04_DST",
-    // portSideA: each["ingress"][0],
-    // portSideB: each["egress"][0],
-    "connected-group-name": "PSU_04_SRc"
-},]
+const polatisArraySrc = []
+const polatisArrayDst = []
+// const polatisArraySrc = [{
+//     name: "PSU_01_SRC",
+//     // portSideA: each["ingress"][0],
+//     // portSideB: each["egress"][0],
+//     "connected-group-name": "CCU_01_DST",
+//     "connected-port-slot": 0
+// }, {
+//     name: "PSU_02_SRC",
+//      // portSideA: each["ingress"][0],
+//     // portSideB: each["egress"][0],
+//     "connected-group-name": "CCU_02_DST",
+//     "connected-port-slot": 1
+// }, {
+//     name: "PSU_03_SRC",
+//     // portSideA: each["ingress"][0],
+//     // portSideB: each["egress"][0],
+//     "connected-group-name": "CCU_03_DST",
+//     "connected-port-slot": 2
+// }, {
+//     name: "PSU_04_SRC",
+//     // portSideA: each["ingress"][0],
+//     // portSideB: each["egress"][0],
+//     "connected-group-name": "CCU_04_DST",
+//     "connected-port-slot": 3
+// },]
+// const polatisArrayDst = [{
+//     name: "CCU_01_DST",
+//     // portSideA: each["ingress"][0],
+//     // portSideB: each["egress"][0],
+//     "connected-group-name": "PSU_01_SRC"
+// }, {
+//     name: "CCU_02_DST",
+//     // portSideA: each["ingress"][0],
+//     // portSideB: each["egress"][0],
+//     "connected-group-name": "PSU_02_SRC"
+// }, {
+//     name: "CCU_03_DST",
+//     // portSideA: each["ingress"][0],
+//     // portSideB: each["egress"][0],
+//     "connected-group-name": "PSU_03_SRC"
+// }, {
+//     name: "CCU_04_DST",
+//     // portSideA: each["ingress"][0],
+//     // portSideB: each["egress"][0],
+//     "connected-group-name": "PSU_04_SRc"
+// },]
+
+// while(waitingDelay) {
+//     dstListContainer.backgroundColor = "black"
+// }
 
 const cancelFuncAppear = (e = null) => {
     e.style.backgroundColor = "firebrick"
@@ -130,6 +81,7 @@ const cancelFuncAppear = (e = null) => {
 }
 
 const cancelFuncLeave = (e = null) => {
+    disableDstSelection()
     //^ If there is no target passed into the parameters, this will instead put all cancel box's to home position
     if(e !== null) {
         e.style.left = "50px"
@@ -147,18 +99,31 @@ const cancelFuncLeave = (e = null) => {
     dst = ""
 }
 
-const linkingFunc = () => {
-    if(src && dst) {
+const linkingFunc = (source, dest) => {
+    
+    if(source && dest) {
+        disableDstSelection()
+        document.querySelectorAll(".src_ul_container").forEach(each => {
+            each.style.pointerEvents = "none"
+        })
+        document.querySelectorAll(".src_text_ul").forEach(each => {
+            each.style.backgroundColor = "rgb(25, 47, 79)"
+        })
+        src = ""
+        dst = ""
         document.querySelectorAll(".list_text").forEach(each => {
+            // console.log(each)
             if(each.value == dstElement.value) {
-                console.log(each)
+                // console.log(each)
                 each.value = 999
+                each.parentElement.children[2].innerText = ""
             }
         })
         srcElement.value = dstElement.value
-        linkPolatisPorts(src, dst)
-        src = ""
-        dst = ""
+        const selection = srcElement.parentElement
+        selection.children[2].innerText = dstElement.innerText
+        linkPolatisPorts(source, dest)
+       
         setTimeout(() => {
             cancelFuncLeave()
             clearMobileSrcSelection()
@@ -167,7 +132,9 @@ const linkingFunc = () => {
     } else { return }}
 
 const show_cancel_box = (e) => {
-    const currentConnect = dstListContainer.children[e.value]
+    enableDstSelection()
+    const index = e.children[0].value
+    const currentConnect = dstListContainer.children[index]
     document.querySelectorAll(".src_list_cancel_box").forEach(each => {
         each.style.left = "50px"
     })
@@ -177,13 +144,27 @@ const show_cancel_box = (e) => {
     document.querySelectorAll(".current_dst_connected").forEach(each => {
         each.classList.remove("current_dst_connected")
     })
-    srcElement = e
-    e.classList.add("mobile_on_click_list_item_src")
-    
+    srcElement = e.children[0]
+    // console.log(srcElement)
+    srcElement.classList.add("mobile_on_click_list_item_src")
     target = e.previousElementSibling
     target.style.left = "-16px"
     if (!currentConnect) return
     currentConnect.classList.add("current_dst_connected")
+}
+
+const enableDstSelection = () => {
+    document.querySelectorAll(".dstLi").forEach(each => {
+        each.style.backgroundColor = "rgb(40, 75, 124)"
+        each.style.color = "white"
+    })
+}
+
+const disableDstSelection = () => {
+    document.querySelectorAll(".dstLi").forEach(each => {
+        each.style.backgroundColor = "rgb(25, 47, 79)"
+        each.style.color = "rgb(180, 180, 180)"
+    })
 }
 
 const clearMobileDstSelection = () => {
@@ -198,6 +179,8 @@ const clearMobileSrcSelection = () => {
         each.classList.remove("mobile_on_click_list_item_src")
     })
 }
+
+
 
 //~=================================================================================
 //&=================================================================================
@@ -218,14 +201,14 @@ const linkPolatisPorts = async (portSrc, portDst) => {
     //^ Find current link and break it on the UI so the new link is
     //^ the only visible link
     const removedDstConnectIndex = polatisArrayDst.findIndex(o => o.name === portDst)
-    console.log(removedDstConnectIndex)
+    // console.log(removedDstConnectIndex)
     
     polatisArraySrc.forEach(each => {
-        console.log(each)
+        // console.log(each)
         if(each["connected-port-slot"] == removedDstConnectIndex)
         each["connected-port-slot"] = undefined
     })
-    console.log(polatisArraySrc)
+    // console.log(polatisArraySrc)
     // console.log("SRC:", srcGroupsEnd)
     // console.log("DST:", dstGroupsEnd)
 
@@ -241,19 +224,31 @@ const linkPolatisPorts = async (portSrc, portDst) => {
         }  
     })
     //& Custom Header
-    const res2 = await fetch(
-        url2, {
-            method: "POST",
-            headers: {
-                "Authorization": "Basic " +btoa("admin:root"),
-                "Content-Type": "application/yang-data+json",
-            },
-            "credential": "include",
-            "mode": "cors",
-            body: postDictionary
-        }
-        )
-    console.log(`${portSrc} --> ${portDst}`)
+        const res = await fetch(
+            url2, {
+                method: "POST",
+                headers: {
+                    "Authorization": "Basic " +btoa("admin:root"),
+                    "Content-Type": "application/yang-data+json",
+                },
+                // "credential": "include",
+                "mode": "cors",
+                body: postDictionary
+            }
+            )
+            if (!res.ok) {
+                console.log("try again")
+                return
+            }
+    // console.log(`${portSrc} --> ${portDst}`)
+    // src = ""
+    // dst = ""
+    document.querySelectorAll(".src_ul_container").forEach(each => {
+        each.style.pointerEvents = "auto"
+    })
+    document.querySelectorAll(".src_text_ul").forEach(each => {
+        each.style.backgroundColor = "rgb(40, 75, 124)"
+    })
 }
 
 async function PullAndPush() {
@@ -281,7 +276,7 @@ async function PullAndPush() {
                 }
                 
                 if(each["group-name"].toLowerCase().includes(srcSearch.toLowerCase())) {
-                    console.log(each["connected-group"])
+                    // console.log(each["connected-group"])
                     srcGroupsHold.push({
                         name: each["group-name"],
                         portSideA: each["ingress"][0],
@@ -327,36 +322,36 @@ async function PullAndPush() {
     }
     const appendArrayList = () => {
         polatisArraySrc.forEach(each => {
+            const connected = each["connected-group-name"] ? each["connected-group-name"] : ""
             const newNode = document.createElement("div")
             newNode.innerHTML = `
             <ul class="src_ul_container">
             <li class="src_list_cancel_box" onmousedown="cancelFuncLeave(this)" onmouseup="cancelFuncAppear(this)">X</li>
-            <li class="list_text" onclick="show_cancel_box(this)"} value="${each["connected-port-slot"]}">${each["name"]}</li>
+            <ul class="${each["name"]} src_text_ul" onclick="show_cancel_box(this)">
+            <li class="list_text"} value="${each["connected-port-slot"]}">${each["name"]}</li>
+            <div class="line"></div>
+            <li class="list_text_under">${connected}</li>
+            </ul>
             </ul>
             `
-            newNode.addEventListener('click', (e) => {
-                src = e.target.innerText
-                console.log(e.target)
-                clearMobileSrcSelection()
-                e.target.classList.add("mobile_on_click_list_item_src")
-                linkingFunc()
-            })
             
             srcListContainer.appendChild(newNode)
         })
         
         polatisArrayDst.forEach((each, index) => {
             const newNode = document.createElement("li")
+            newNode.classList.add("dstLi")
             newNode.innerHTML = `
-                <span class="dstSpan" value=${index}>${each["name"]}</span>
+                    <span class="dstSpan" value=${index}>${each["name"]}</span>
             `
             newNode.addEventListener('click', (e) => {
+                if(e.target.closest("li").style.color !== "white") return
                 dst = e.target.innerText
                 dstElement = e.target
                 clearMobileDstSelection()
                 e.target.value = index
                 e.target.closest("li").classList.add("mobile_on_click_list_item_dst")
-                linkingFunc()
+                linkingFunc(src, dst)
             })
             dstListContainer.appendChild(newNode)
         })
@@ -367,14 +362,26 @@ async function PullAndPush() {
         })
     }
     //* Trigger Get and Post
-    // const data = PullAndPush()
+    const data = PullAndPush()
 
+    
     setTimeout(() => {
         appendArrayList()
+        document.querySelectorAll(".src_text_ul").forEach(each => {
+            each.addEventListener('click', (e) => {
+                const element = e.target.closest(".src_text_ul")
+                src = element.classList[0]
+                // }
+                // console.log("AFTER CLICK", src)
+                clearMobileSrcSelection()
+                e.target.closest(".src_text_ul").classList.add("mobile_on_click_list_item_src")
+                linkingFunc(src, dst)
+            })
+        })
     }, 2000)
-
-    console.log(polatisArraySrc)
-    console.log(polatisArrayDst)
+    
+    // console.log(polatisArraySrc)
+    // console.log(polatisArrayDst)
 
     //~=================================================================================
     //&=================================================================================

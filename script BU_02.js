@@ -74,54 +74,54 @@ let srcElement = null
 let dstElement = null
 
 //^ TEST Data for coding at home, will be appended with API data when online
-// const polatisArraySrc = []
-// const polatisArrayDst = []
-const polatisArraySrc = [{
-    name: "PSU_01_SRC",
-    // portSideA: each["ingress"][0],
-    // portSideB: each["egress"][0],
-    "connected-group-name": "CCU_01_DST",
-    "connected-port-slot": 0
-}, {
-    name: "PSU_02_SRC",
-     // portSideA: each["ingress"][0],
-    // portSideB: each["egress"][0],
-    "connected-group-name": "CCU_02_DST",
-    "connected-port-slot": 1
-}, {
-    name: "PSU_03_SRC",
-    // portSideA: each["ingress"][0],
-    // portSideB: each["egress"][0],
-    "connected-group-name": "CCU_03_DST",
-    "connected-port-slot": 2
-}, {
-    name: "PSU_04_SRC",
-    // portSideA: each["ingress"][0],
-    // portSideB: each["egress"][0],
-    "connected-group-name": "CCU_04_DST",
-    "connected-port-slot": 3
-},]
-const polatisArrayDst = [{
-    name: "CCU_01_DST",
-    // portSideA: each["ingress"][0],
-    // portSideB: each["egress"][0],
-    "connected-group-name": "PSU_01_SRC"
-}, {
-    name: "CCU_02_DST",
-    // portSideA: each["ingress"][0],
-    // portSideB: each["egress"][0],
-    "connected-group-name": "PSU_02_SRC"
-}, {
-    name: "CCU_03_DST",
-    // portSideA: each["ingress"][0],
-    // portSideB: each["egress"][0],
-    "connected-group-name": "PSU_03_SRC"
-}, {
-    name: "CCU_04_DST",
-    // portSideA: each["ingress"][0],
-    // portSideB: each["egress"][0],
-    "connected-group-name": "PSU_04_SRc"
-},]
+const polatisArraySrc = []
+const polatisArrayDst = []
+// const polatisArraySrc = [{
+//     name: "PSU_01_SRC",
+//     // portSideA: each["ingress"][0],
+//     // portSideB: each["egress"][0],
+//     "connected-group-name": "CCU_01_DST",
+//     "connected-port-slot": 0
+// }, {
+//     name: "PSU_02_SRC",
+//      // portSideA: each["ingress"][0],
+//     // portSideB: each["egress"][0],
+//     "connected-group-name": "CCU_02_DST",
+//     "connected-port-slot": 1
+// }, {
+//     name: "PSU_03_SRC",
+//     // portSideA: each["ingress"][0],
+//     // portSideB: each["egress"][0],
+//     "connected-group-name": "CCU_03_DST",
+//     "connected-port-slot": 2
+// }, {
+//     name: "PSU_04_SRC",
+//     // portSideA: each["ingress"][0],
+//     // portSideB: each["egress"][0],
+//     "connected-group-name": "CCU_04_DST",
+//     "connected-port-slot": 3
+// },]
+// const polatisArrayDst = [{
+//     name: "CCU_01_DST",
+//     // portSideA: each["ingress"][0],
+//     // portSideB: each["egress"][0],
+//     "connected-group-name": "PSU_01_SRC"
+// }, {
+//     name: "CCU_02_DST",
+//     // portSideA: each["ingress"][0],
+//     // portSideB: each["egress"][0],
+//     "connected-group-name": "PSU_02_SRC"
+// }, {
+//     name: "CCU_03_DST",
+//     // portSideA: each["ingress"][0],
+//     // portSideB: each["egress"][0],
+//     "connected-group-name": "PSU_03_SRC"
+// }, {
+//     name: "CCU_04_DST",
+//     // portSideA: each["ingress"][0],
+//     // portSideB: each["egress"][0],
+//     "connected-group-name": "PSU_04_SRc"
+// },]
 
 const cancelFuncAppear = (e = null) => {
     e.style.backgroundColor = "firebrick"
@@ -367,7 +367,7 @@ async function PullAndPush() {
         })
     }
     //* Trigger Get and Post
-    // const data = PullAndPush()
+    const data = PullAndPush()
 
     setTimeout(() => {
         appendArrayList()
