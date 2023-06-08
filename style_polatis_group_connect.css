@@ -1,268 +1,180 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
 body {
     background: #0061b5;
     font-family: Arial, Helvetica, sans-serif;
     display: flex;
     flex-direction: column;
+    /* background-color: rgb(25, 47, 79);
+    color: rgb(180, 180, 180); */
 }
 
-#list_h3 {
+#venue_select_modal {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #0061b5;
+    color: white;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4rem;
+}
+
+#venue_select_btn_container {
+    max-width: 50%;
+    max-height: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.venue_select_btn {
+    width: 110px;
+    height: 110px;
+    background-color: rgb(40, 75, 124);
+    color: white;
+    outline: solid 1px white;
+    border: none;
+    line-height: 20px;
+}
+
+.venue_select_btn:hover {
+    background-color: white;
+    color: black;
+    outline-color: black;
+}
+
+#change_venue_btn {
+    background-color: rgb(40, 75, 124);
     color: white;
     margin: 0 auto;
     display: flex;
     justify-content: center;
     gap: 9.5rem;
     max-width: 420px;
+    position: relative;
+    font-size: 1.5rem;
+    top: 20px;
+    border: 1px solid white;
+    padding: 1rem;
 }
 
-#list_div {
-    margin: 0 auto;
+#change_venue_btn:hover {
+    background-color: black;
+    cursor: pointer;;
+}
+
+#page-container {
+    position: relative;
+    top: 20px;
+    width: 100%;
+    height: 90vh;
     display: flex;
-    justify-content: space-between;
-    max-width: 420px;
-    z-index: 5;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 8rem;
+    align-items: center;
+}
+
+h3 {
+    display: flex;
+    flex-direction: row;
+    color: white;
+    gap: 8rem;
+    font-size: 2rem;
+    margin: 0 auto;
+}
+
+#container_div {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 70%;
+    height: 80%;
+}
+
+#list_div_left, #list_div_right {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 2rem;
 }
 
 #src_list_container, #dst_list_container {
-    max-width: 200px;
-    padding: 0;
-    display: flex;
-    gap: 2rem;
-    list-style-type: none;
     display: flex;
     flex-direction: column;
+    gap: 1rem;
 }
 
-#src_list_container {
-   position: relative;
-   left: 25px;
-}
-
-.dstLi {
-    background-color: rgb(25, 47, 79);
-    color: rgb(180, 180, 180);
-    outline: 2px solid rgb(197, 197, 197);
-    border-radius: 1%;
-    min-height: calc(185px - 2rem);
-    min-width: 358px;
+.src_text_btn, .dst_text_btn {
+    font-size: 1.5rem;
     display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
     justify-content: center;
     align-items: center;
-    font-weight: 700;
-    overflow: hidden;
-}
-
-.src_ul_container {
-    position: relative;
-    left: -50px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    list-style-type: none;
-    padding: 0;
-}
-
-.list_text {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-weight: 700;
-    z-index: 1;
-}
-
-.src_text_ul {
+    padding: 0.5rem 4rem;
     background-color: rgb(40, 75, 124);
-    outline: 2px solid rgb(197, 197, 197);
-    padding: 0 1rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.8rem;
-    color: white;
-    border-radius: 1%;
-    min-height: 185px;
-    min-width: 358px;
-    justify-content: center;
-    font-weight: 700;
-    z-index: 1;
+    /* border: 1px solid white; */
+    color: rgb(255, 255, 255);
+    height: 90px;
+}
+
+.src_text_btn:hover, .dst_text_btn:hover {
+    background-color: white !important;
+    color: black !important;
 }
 
 .line {
-    position: relative;
-    top: -10px;
     background-color: grey;
-    position: relative;
-    bottom: 20px;
-    color: grey;
+    height: 1.5px;
     width: 90%;
-    height: 2px;
-    margin: 0.5rem 0;
 }
+
 
 .list_text_under {
-    position: relative;
-    bottom: 15px;
-    list-style-type: none;
-    font-size: 2rem;
-    color: grey;
-    z-index: 2;
-    min-height: 38px;
+    font-size: 1rem;
+    height: 20px;
 }
 
-.src_list_cancel_box {
-    background-color: firebrick;
-    color: white;
-    display: block;
-    position: relative;
-    left: 100px;
-    min-width: 50px;
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2rem;
-    transition: left .08s ease-in-out;
-    overflow: none;
-}
 
-.src_list_cancel_box:hover {
-    background-color: rgb(98, 19, 19);
-    cursor: pointer;
-}
-
-#mobile_cancel_button {
-    display: none;
+.mobile_on_click_list_item_src {
+    background-color: white;
+    color: black;
 }
 
 .current_dst_connected {
     background-color: forestgreen !important;
+    color: white !important;
 }
 
-
-@media only screen and (max-width: 980px) and (orientation: portrait)  {
-
-    body {
-        /* background-color: rgb(211, 184, 169); */
-        background: rgb(51, 138, 252);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 2rem;
-        margin-top: 2rem;
-    }
-
-    #list_h3 {
-        min-width: 90%;
-        display: flex;
-        flex-direction: row;
-        margin: 0 auto;
-        margin-top: 2rem;
-        gap: 2.5rem;
-        text-align: center;
-    }
-    
-    #list_h3 h3 {
-        margin: 1rem;
-        min-width: 400px;
-    }
-
-    #list_div {
-        min-width: 100%;
-        justify-content: center;
-        gap: 2.5rem;
-    }
-    #src_list_container, #dst_list_container {
-        min-width: 45%;
-        overflow: scroll;
-        height: 1160px;
-    }
-
-    .list_text, #dst_list_container li, #list_h3  {
-        min-width: 100%;
-        font-size: 3.5rem;
-    }
-
-    .list_text, #dst_list_container li {
-        padding: 1rem 0;
-    }
-
-    .mobile_on_click_list_item_src, .mobile_on_click_list_item_dst {
-        background-color: white !important;
-        color: black !important;
-    }
-
-    #mobile_cancel_button {
-        display: block;
-        /* position: fixed; */
-        /* left: 1px; */
-        /* bottom: 1px; */
-        font-size: 4rem;
-        background-color: firebrick;
-        color: white;
-        text-align: center;
-        margin: 0 auto;
-        min-width: 95%;
-        padding: 2rem 0;
-        margin-top: 1.5rem;
-        text-transform: uppercase;
-        z-index: 100;
-    }
-
-    .src_list_cancel_box {
-        opacity: 0;
-        pointer-events: none;
-    }
-
+#mobile_cancel_button_div {
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
-@media only screen and (min-width: 981px) and (max-width: 3780px) {
-
-    #list_h3 {
-        justify-content: center;
-        gap: 12.5rem;
-    }
-
-    #list_div {
-        justify-content: space-around;
-        gap: 4rem;
-    }
-
-    #src_list_container {
-        position: relative;
-        left: 20px;
-    }
-
-    .src_text_ul:hover, .dstLi:hover {
-        background-color: white !important;
-        color: rgb(22, 42, 70) !important;
-        cursor: pointer;
-    }
-
-    .src_text_ul {
-        gap: 12px;
-    }
-
-    .src_text_ul li:nth-of-type(1) {
-        margin-top: 15px;
-    }
-
-    .src_ul_container {
-        justify-content: center;
-    }
-
-    .src_text_ul, .dstLi{
-        min-width: 200px;
-        min-height: 100px;
-        font-size: 1rem;
-    }
-
-    .dstLi {
-        padding: 0 1rem;
-    }
-
-    .list_text_under {
-        font-size: 1rem;
-        font-size: 1rem;
-        min-height: 18px;
-    }
-    
+#mobile_cancel_button {
+    position: sticky;
+    bottom: 0;
+    background-color: firebrick;
+    color: white;
+    width: 50%;
+    height: 4rem;
+    font-size: 1.25rem;
 }
+
+/** --------------------------------------------------------------------- */
+/** --------------------------------------------------------------------- */
+/** --------------------------------------------------------------------- */

@@ -71,7 +71,8 @@ async function fetcher(portNumber = null, portEl, nameEl, portConnectedEl, nameC
     let label1 = ""
     let label2 = ""
     let message = ""
-    const url = "http://10.239.0.32:8008/api/data/optical-switch:cross-connects"
+    // const url = "http://10.239.0.32:8008/api/data/optical-switch:cross-connects"
+    const url = "http://10.239.63.32:81/polatis/data/cross-connects"
     
     const res = await fetch(url, { headers: headers, "credential": "include", "mode": "cors" })
     const jsonRes = await res.json()
@@ -87,7 +88,8 @@ async function fetcher(portNumber = null, portEl, nameEl, portConnectedEl, nameC
         
     //^ function for API calling the port endpoint to get ingress and egress data
     async function portAPILabelFunc(arg) {
-        const endpoint = "http://10.239.0.32:8008/api/data/optical-switch:ports/port=" + arg + "/port-label"
+        // const endpoint = "http://10.239.0.32:8008/api/data/optical-switch:ports/port=" + arg + "/port-label"
+        const endpoint = `http://10.239.63.32:81/polatis/data/ports/port-label/${arg}`
         const p = await fetch(endpoint, { headers: headers, "credential": "include", "mode": "cors" })
         const label = await p.json()
         // console.log(label)
